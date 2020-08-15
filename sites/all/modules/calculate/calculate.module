@@ -1,0 +1,71 @@
+<?php
+/**
+ * @file
+ * calculate.module
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function calculate_permission() {
+    return array(
+      'access account calculation' => array(
+        'title' => t('Access Account Calculations'),
+        'description' => t('Access for account calculations.'),
+      ),
+    );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function calculate_menu() {
+    $items['calc'] = array(
+        'title' => 'Account Calculations',
+        'type' => MENU_NORMAL_ITEM,
+        'page callback' => 'calculate_calcpage',
+        'access arguments' => array('access content'),
+    );
+    return $items;
+}
+
+/**
+ * Calc Callback function
+ */
+function calculate_calcpage() {
+    $form['preview'] = array(
+        '#type' => 'button', 
+        '#value' => t('Preview'), 
+        '#weight' => 19,
+    );
+
+    return $form;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function calculate_block_info() {
+    $blocks['calculate'] = array(
+        'info' => t('Calculation Block'),
+    );
+
+    return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function calculate_block_view($delta = '') {
+    $block = array();
+
+    switch ($delta) {
+      case 'calculate':
+        $block['subject'] = t('This is the calculation block for accounts.');
+        $block['content'] = "<p>Greetings, <b>User</b>!</p>";
+        break;
+    }
+    return $block;
+}
+ 
+?>
