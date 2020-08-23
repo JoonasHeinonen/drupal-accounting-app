@@ -9,63 +9,75 @@
  */
 function calculate_permission() {
     return array(
-      'access account calculation' => array(
-        'title' => t('Access Account Calculations'),
-        'description' => t('Access for account calculations.'),
+      'submit calculate' => array(
+        'title' => t('Submit Account Calculations'),
+        'description' => t('Submit and store account calculations to the database.'),
       ),
     );
 }
-
+ 
 /**
  * Implements hook_menu().
  */
 function calculate_menu() {
-    $items['calc'] = array(
+    $items = array();
+
+    $items['calculate'] = array(
         'title' => 'Account Calculations',
         'type' => MENU_NORMAL_ITEM,
-        'page callback' => 'calculate_calcpage',
-        'access arguments' => array('access content'),
+        'access arguments' => array('submit calculate'),
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('calculate_form')
     );
+
     return $items;
 }
 
 /**
- * Calc Callback function
+ * Calculate form.
  */
-function calculate_calcpage() {
-    $form['preview'] = array(
-        '#type' => 'button', 
-        '#value' => t('Preview'), 
-        '#weight' => 19,
+function calculate_form($form, &$form_state) {
+    $form['calcnumber'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Account Calculation'),
+        '#size' => 10,
+        '#maxlength' => 10,
+        '#required' => TRUE,
+        '#description' => t('Enter the title for your account.'),
+    );
+
+    $form['calctextfield'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Account Calculation'),
+        '#size' => 60,
+        '#maxlength' => 120,
+        '#required' => TRUE,
+    );
+
+    $form['calctext'] = array(
+        '#type' => 'textarea',
+        '#title' => t('Account Calculation'),
+        '#description' => t('Enter the values of your accounting.'),
+        '#default_value' => '',
+        '#required' => TRUE,
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Add item'),
     );
 
     return $form;
 }
 
-/**
- * Implements hook_block_info().
- */
-function calculate_block_info() {
-    $blocks['calculate'] = array(
-        'info' => t('Calculation Block'),
-    );
-
-    return $blocks;
-}
-
-/**
- * Implements hook_block_view().
- */
-function calculate_block_view($delta = '') {
-    $block = array();
-
-    switch ($delta) {
-      case 'calculate':
-        $block['subject'] = t('This is the calculation block for accounts.');
-        $block['content'] = "<p>Greetings, <b>User</b>!</p>";
-        break;
+function current_posts_form_validate($form, &$form_state){
+    $max_num = $form_state['values']['current_posts_max'];
+    if (!is_numeric($max_num)){
+      form_set_error('current_posts_max', t('You must enter a number for the maximum number of posts to display.'));
     }
-    return $block;
-}
+    elseif ($max_num <= 0){
+      form_set_error('current_posts_max', t('Maximum number of posts to display must be positive.'));
+    }
+  }
  
 ?>
