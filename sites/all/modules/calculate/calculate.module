@@ -37,47 +37,117 @@ function calculate_menu() {
  * Calculate form.
  */
 function calculate_form($form, &$form_state) {
-    $form['calcnumber'] = array(
+
+    $form["group_1"] = array(
+        '#prefix' => '<section>',
+        '#suffix' =>'</section>',
+    );
+   
+   
+   $form["group_1"]['div_1'] = array(
+        '#prefix' => '<div style="display:flex;flex-flow:colomn wrap;">',
+        '#id'     => 'div_1',
+        '#suffix' => '</div>',
+    );
+
+    $form["group_1"]['div_1']['el_1'] = array(
+        '#prefix' => '<div style="margin-right:1em;">',
+        '#id'     => 'el_1',
+        '#suffix' => '</div>',
+    );
+
+    $form['group_1']['div_1']['el_1']['calcnumber'] = array(
         '#type' => 'textfield',
-        '#title' => t('Account Calculation'),
-        '#size' => 10,
+        '#title' => t('Account Calculation ID'),
+        '#size' => 20,
         '#maxlength' => 10,
         '#required' => TRUE,
-        '#description' => t('Enter the title for your account.'),
+        '#default_value' => rand(0, 999999),
     );
 
-    $form['calctextfield'] = array(
+    $form["group_1"]['div_1']['el_2'] = array(
+        '#prefix' => '<div style="margin-right:1em;">',
+        '#id'     => 'el_2',
+        '#suffix' => '</div>',
+    );
+
+    $form['group_1']['div_1']['el_2']['calctextfield'] = array(
         '#type' => 'textfield',
-        '#title' => t('Account Calculation'),
-        '#size' => 60,
+        '#title' => t('Account Calculation Title'),
+        '#size' => 56,
         '#maxlength' => 120,
+        '#default_value' => 'Random Title...',
         '#required' => TRUE,
     );
 
-    $form['calctext'] = array(
+    $form['group_2']['calctext'] = array(
         '#type' => 'textarea',
-        '#title' => t('Account Calculation'),
+        '#title' => t('Account Calculation Description'),
         '#description' => t('Enter the values of your accounting.'),
-        '#default_value' => '',
+        '#default_value' => 'Lorem ipsum dolor sit amet in namen des kaisers...',
         '#required' => TRUE,
     );
 
-    $form['submit'] = array(
+    $form["group_3"] = array(
+        '#prefix' => '<section>',
+        '#suffix' =>'</section>',
+    );
+
+    $form["group_3"]['div_1'] = array(
+        '#prefix' => '<div style="display:flex;flex-flow:colomn wrap;">',
+        '#id'     => 'div_1',
+        '#suffix' => '</div>',
+    );
+
+    $form['group_3']['div_1']['el_1']['submit'] = array(
         '#type' => 'submit',
         '#value' => t('Add item'),
+    );
+
+    $form['group_3']['div_1']['el_2']['reset'] = array(
+        '#type' => 'submit',
+        '#value' => t('Reset'),
     );
 
     return $form;
 }
 
-function current_posts_form_validate($form, &$form_state){
-    $max_num = $form_state['values']['current_posts_max'];
-    if (!is_numeric($max_num)){
-      form_set_error('current_posts_max', t('You must enter a number for the maximum number of posts to display.'));
+/**
+ * Validation handler for the calculate_form
+ */
+function calculate_form_validate($form, &$form_state) {
+    // print('<pre>'.print_r($form_state['values'], 1).'</pre>');die();
+    if (!is_numeric($form_state['values']['calcnumber'])) {
+        form_set_error('calcnumber', t('You must enter a valid number!'));
+        return FALSE;
     }
-    elseif ($max_num <= 0){
-      form_set_error('current_posts_max', t('Maximum number of posts to display must be positive.'));
-    }
-  }
- 
+    return TRUE;
+}
+
+/**
+ * Submit handler for the calculate_form. Inserts entry into the database
+ */
+
+function calculate_form_submit($form, &$form_state) {
+    if(!isset($form_state['values']['calcnumber']) || empty($form_state['values']['calcnumber'])) $form_state['values']['calcnumber'] = rand(0, 999999);
+	if(!isset($form_state['values']['calctextfield']) || empty($form_state['values']['calctextfield'])) $form_state['values']['calctextfield'] = 'Something...';
+    if(!isset($form_state['values']['calctext']) || empty($form_state['values']['calctext'])) $form_state['values']['calctext'] = 'The text here was generated automatically, due to testing reasons.';
+    
+    $c_id = db_insert('calculate')
+        ->fields(array(
+            'calcnumber' => $form_state['values']['calcnumber'],
+            'calctextfield' => $form_state['values']['calctextfield'],
+            'calctext' => $form_state['values']['calctext'],
+        ))
+        ->execute();
+
+    drupal_set_message(t('Your form entry has been added.'));
+}
+
+/**
+ * Import the style for our module to use
+ */
+$path = drupal_get_path('module', 'calculate') . '/css/MainStyle.css';
+drupal_add_css($path, 'file');
+
 ?>
