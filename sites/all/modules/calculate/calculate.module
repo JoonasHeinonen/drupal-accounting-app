@@ -37,6 +37,7 @@ function calculate_menu() {
  * Calculate form.
  */
 function calculate_form($form, &$form_state) {
+    $form = array();
 
     $form["group_1"] = array(
         '#prefix' => '<section>',
@@ -74,10 +75,28 @@ function calculate_form($form, &$form_state) {
     $form['group_1']['div_1']['el_2']['calctextfield'] = array(
         '#type' => 'textfield',
         '#title' => t('Account Calculation Title'),
-        '#size' => 56,
+        '#size' => 30,
         '#maxlength' => 120,
         '#default_value' => 'Random Title...',
         '#required' => TRUE,
+    );
+
+    $form["group_1"]['div_1']['el_3'] = array(
+        '#prefix' => '<div style="margin-right:1em;">',
+        '#id'     => 'el_3',
+        '#suffix' => '</div>',
+    );
+
+    $form['group_1']['div_1']['el_3']['calccustomername'] = array(
+        "#type" => "select", 
+        "#title" => t("Select the customer"), 
+        "#default_value" => variable_get("plugin1", true),
+        "#options" => array(
+            "plugin1" => t("No customer available..."),
+            "plugin2" => t("Plugin 2"), 
+            "plugin3" => t("Plugin 3"),
+        ),
+        "#description" => t("Select plugin."),
     );
 
     $form['group_2']['calctext'] = array(
@@ -129,9 +148,6 @@ function calculate_form_validate($form, &$form_state) {
  */
 
 function calculate_form_submit($form, &$form_state) {
-    if(!isset($form_state['values']['calcnumber']) || empty($form_state['values']['calcnumber'])) $form_state['values']['calcnumber'] = rand(0, 999999);
-	if(!isset($form_state['values']['calctextfield']) || empty($form_state['values']['calctextfield'])) $form_state['values']['calctextfield'] = 'Something...';
-    if(!isset($form_state['values']['calctext']) || empty($form_state['values']['calctext'])) $form_state['values']['calctext'] = 'The text here was generated automatically, due to testing reasons.';
     
     $c_id = db_insert('calculate')
         ->fields(array(

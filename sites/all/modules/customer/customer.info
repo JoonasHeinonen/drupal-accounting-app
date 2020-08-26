@@ -1,0 +1,4 @@
+name = Customer Account Creator
+description = Creates new a new customer account
+core = 7.x
+package = Vaari

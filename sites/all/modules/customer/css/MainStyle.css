@@ -1,17 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 
-#calculate-form {
+#customer-form, #calculate-form {
     background-color: #f6f6f2;
     padding: 1em;
     font-family: 'Lato', sans-serif;
-}
-
-#edit-submit:hover {
-    background-color: green;
-    color: white;
-}
-
-#edit-reset:hover {
-    background-color: red;
-    color: white;
 }

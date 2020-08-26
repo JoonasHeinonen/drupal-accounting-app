@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function customer_schema() {
+    $schema = array();
+
+    $schema['customer'] = array(
+      // Example (partial) specification for table "node".
+      'description' => 'Customer Account.',
+      'fields' => array(
+        'ca_id' => array(
+          'description' => 'The primary identifier for a customer account.',
+          'type' => 'serial',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ),
+        'customername' => array(
+          'description' => 'Name of the customer account.',
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+          'default' => '',
+        ),
+        'customeremail' => array(
+          'description' => 'Email for the customer account',
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+          'default' => 'default@email.com',
+        ),
+        'customerphone' => array(
+          'description' => 'Phone number for the customer account',
+          'type' => 'int',
+          'length' => 999,
+          'not null' => TRUE,
+        ),
+        'customeraddress' => array(
+          'description' => 'Physical address for the customer account',
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+          'default' => '',
+        ),
+      ),
+      'indexes' => array(
+        'customer_customername_changed' => array('customername'),
+      ),
+      'primary key' => array('ca_id'),
+    );
+    return $schema;
+  }
+?>

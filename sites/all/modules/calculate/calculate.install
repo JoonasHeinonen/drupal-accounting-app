@@ -30,6 +30,11 @@ function calculate_schema() {
           'not null' => TRUE,
           'default' => '',
         ),
+        'customer_id' => array(
+          'description' => 'Reference to the customer related to the calculation',
+          'type' => 'text',
+          'not null' => TRUE,
+        ),
         'calctext' => array(
           'description' => 'A field for storing longer text',
           'type' => 'text',
@@ -40,6 +45,14 @@ function calculate_schema() {
         'calculate_calcnumber_changed' => array('calcnumber'),
       ),
       'primary key' => array('c_id'),
+      'foreign keys' => array(
+        'calculate' => array(
+          'table' => 'calculate',
+          'columns' => array(
+            'customer_id' => 'ca_id',
+          ),
+        ),
+      ),
     );
     return $schema;
   }
