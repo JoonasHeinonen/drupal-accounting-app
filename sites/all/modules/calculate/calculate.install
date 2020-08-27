@@ -34,6 +34,7 @@ function calculate_schema() {
           'description' => 'Reference to the customer related to the calculation',
           'type' => 'text',
           'not null' => TRUE,
+          'default' => 0,
         ),
         'calctext' => array(
           'description' => 'A field for storing longer text',

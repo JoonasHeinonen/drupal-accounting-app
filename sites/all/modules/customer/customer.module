@@ -154,30 +154,30 @@ function customer_form_submit($form, &$form_state) {
  * Display submitted customers from the database.
  */
 function customer_submissions() {
-    $query = db_select('customer', 'ca');
+    $query = db_select('calculate', 'c');
     $query
-        ->fields('ca', array('ca_id', 'customername', 'customeremail', 'customerphone', 'customeraddress'))
+        ->fields('c', array('c_id', 'calcnumber', 'calctextfield', 'customer_id', 'calctext'))
         ->range(0, 50)
-        ->orderBy('ca.ca_id', 'DESC');
+        ->orderBy('c.c_id', 'DESC');
 
     $results = $query->execute();
 
     $header = array(
         t('ID'), 
-        t('Customer Name'), 
-        t('Customer Email'), 
-        t('Customer Phone Number'), 
-        t('Customer Address')
+        t('Calculation Number'), 
+        t('Calculation Textfield'), 
+        t('Customer ID'), 
+        t('Calculation Text')
     );
     $rows = array();
 
     foreach($results as $result) {
         $rows[] = array(
-            check_plain($result->ca_id),
-            check_plain($result->customername),
-            check_plain($result->customeremail),
-            check_plain($result->customerphone),
-            check_plain($result->customeraddress),
+            check_plain($result->c_id),
+            check_plain($result->calcnumber),
+            check_plain($result->calctextfield),
+            check_plain($result->customer_id),
+            check_plain($result->calctext),
         );
     }
 
