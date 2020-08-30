@@ -13,8 +13,8 @@ function customer_permission() {
         'title' => t('Submit Customer Account'),
         'description' => t('Submit and store account customer accounts to the database.'),
       ),
-      'access customer submissions' => array(
-        'title' => t('View Customer submissions'),
+      'access display customers' => array(
+        'title' => t('View submitted Customers'),
         'description' => t('Display submitted customer accounts from the database.'),
       ),
     );
@@ -34,11 +34,11 @@ function customer_menu() {
         'page arguments' => array('customer_form')
     );
 
-    $items['customer-submissions'] = array(
-        'title' => 'Customer Submissions',
+    $items['customer-display-all'] = array(
+        'title' => 'Display Customers',
         'type' => MENU_NORMAL_ITEM,
-        'access arguments' => array('access customer submissions'),
-        'page callback' => 'customer_submissions',
+        'access arguments' => array('access display customers'),
+        'page callback' => 'customer_display_all',
     );
 
     return $items;
@@ -153,31 +153,31 @@ function customer_form_submit($form, &$form_state) {
 /**
  * Display submitted customers from the database.
  */
-function customer_submissions() {
-    $query = db_select('calculate', 'c');
+function customer_display_all() {
+    $query = db_select('customer', 'ca');
     $query
-        ->fields('c', array('c_id', 'calcnumber', 'calctextfield', 'customer_id', 'calctext'))
+        ->fields('ca', array('ca_id', 'customername', 'customeremail', 'customerphone', 'customeraddress'))
         ->range(0, 50)
-        ->orderBy('c.c_id', 'DESC');
+        ->orderBy('ca.ca_id', 'DESC');
 
     $results = $query->execute();
 
     $header = array(
         t('ID'), 
-        t('Calculation Number'), 
-        t('Calculation Textfield'), 
-        t('Customer ID'), 
-        t('Calculation Text')
+        t('Customer Name'), 
+        t('Customer Email'), 
+        t('Customer Phonenumber'), 
+        t('Customer Address')
     );
     $rows = array();
 
     foreach($results as $result) {
         $rows[] = array(
-            check_plain($result->c_id),
-            check_plain($result->calcnumber),
-            check_plain($result->calctextfield),
-            check_plain($result->customer_id),
-            check_plain($result->calctext),
+            check_plain($result->ca_id),
+            check_plain($result->customername),
+            check_plain($result->customeremail),
+            check_plain($result->customerphone),
+            check_plain($result->customeraddress),
         );
     }
 
