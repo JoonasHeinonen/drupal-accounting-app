@@ -87,16 +87,11 @@ function calculate_form($form, &$form_state) {
         '#suffix' => '</div>',
     );
 
-    $form['group_1']['div_1']['el_3']['calccustomername'] = array(
+    $form['group_1']['div_1']['el_3']['customer_id'] = array(
         "#type" => "select", 
         "#title" => t("Select the customer"), 
-        "#default_value" => variable_get("plugin1", true),
-        "#options" => array(
-            "plugin1" => t("No customer available..."),
-            "plugin2" => t("Plugin 2"), 
-            "plugin3" => t("Plugin 3"),
-        ),
-        "#description" => t("Select plugin."),
+        "#options" => return_customers(),
+        '#default_value' => get_last_customer(),
     );
 
     $form['group_2']['calctext'] = array(
@@ -132,6 +127,52 @@ function calculate_form($form, &$form_state) {
 }
 
 /**
+ * Return all the customers for our form.
+ */
+function return_customers() {
+    $query = db_select('customer', 'ca');
+    $query
+        ->fields('ca', array('customername'))
+        ->range(0, 50)
+        ->orderBy('ca.customername', 'DESC');
+
+    $results = $query->execute();
+
+    $rows = array();
+
+    foreach($results as $result) {
+        $rows[] = array(
+            check_plain($result->customername),
+        );
+    }
+
+    return $rows;
+}
+
+/**
+ * Get the last customer for our form.
+ */
+function get_last_customer() {
+    $query = db_select('customer', 'ca');
+    $query
+        ->fields('ca', array('customername'))
+        ->range(0, 50)
+        ->orderBy('ca.customername', 'DESC');
+
+    $results = $query->execute();
+
+    $rows = array();
+
+    foreach($results as $result) {
+        $rows[] = array(
+            check_plain($result->customername),
+        );
+    }
+
+    return $rows;
+}
+
+/**
  * Validation handler for the calculate_form
  */
 function calculate_form_validate($form, &$form_state) {
@@ -153,6 +194,7 @@ function calculate_form_submit($form, &$form_state) {
         ->fields(array(
             'calcnumber' => $form_state['values']['calcnumber'],
             'calctextfield' => $form_state['values']['calctextfield'],
+            'customer_id' => $form_state['values']['customer_id'],
             'calctext' => $form_state['values']['calctext'],
         ))
         ->execute();
