@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+/*
+function contact_admin_schema() {
+    $schema['contact_admin'] = array(
+        'description' => 'Table for messages sent to the website administration.',
+        'fields' => array(
+            'message_id' => array(
+                'description' => 'The primary identifier for a message.',
+                'type' => 'serial',
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+            ),
+            'title' => array(
+                'description' => 'The title for the issue.',
+                'type' => 'varchar',
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+                'default' => '',
+            ),
+            'email' => array(
+                'description' => 'The email of the message sender.',
+                'type' => 'varchar',
+                'length' => 255,
+                'not null' => TRUE,
+                'default' => '',
+            ),
+            'title' => array(
+                'description' => 'The title for the issue.',
+                'type' => 'varchar',
+                'length' => 255,
+                'not null' => TRUE,
+                'default' => '',
+            ),
+        ),
+        'primary key' => array(
+            'message_id',
+        ),
+    );
+
+    return $schema;
+}
+*/
+?>

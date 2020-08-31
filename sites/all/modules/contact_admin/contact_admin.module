@@ -1,0 +1,97 @@
+<?php
+/**
+ * @file
+ * contact_admin.module
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function contact_admin_permission() {
+    return array(
+        'contact administration' => array(
+          'title' => t('Contact Administration'),
+          'description' => t('Submit your messages about problems/issues you face to the website administration.'),
+        ),
+      );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function contact_admin_menu() {
+    $items['contact_admin'] = array(
+        'title' => 'Contact Administration',
+        'type' => MENU_NORMAL_ITEM,
+        'access arguments' => array('contact administration'),
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('contact_admin_contactform'),
+    );
+
+    return $items;
+}
+
+/**
+ * Actual form for the contact module is defined here.
+ */
+function contact_admin_contactform() {
+    $form = array();
+
+    $form['title'] = array(
+        '#title' => t('Title'),
+        '#type' => 'textfield',
+        '#description' => t('Enter the title for your issue.'),
+        '#size' => 80, 
+        '#required' => TRUE,
+    );
+
+    $form['email'] = array(
+        '#title' => t('Email'),
+        '#type' => 'textfield',
+        '#description' => t('Enter your email here.'),
+        '#size' => 80, 
+        '#required' => TRUE,
+    );
+
+    $form['message'] = array(
+        '#title' => t('Message'),
+        '#type' => 'textarea',
+        '#description' => t('Message and the description for the issue you\'re currently dealing with.'),
+        '#resizable' => FALSE,
+        '#required' => TRUE,
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Submit'),
+    );
+    
+    return $form;
+}
+
+/** 
+ * Form validation.
+ */
+function contact_admin_contactform_validate($form, &$form_state) {
+    drupal_set_message(t("Form is valid."));
+}
+
+/** 
+ * Submit the form and handle post-validation.
+ */
+function contact_admin_contactform_submit($form, &$form_state) {
+    $title = $form_state['values']['title'];
+    $email = $form_state['values']['email'];
+    $message = $form_state['values']['message'];
+
+    $message_id = db_insert('contact_admin')
+    ->fields(array(
+        'title' => $form_state['values']['title'],
+        'email' => $form_state['values']['email'],
+        'message' => $form_state['values']['message'],
+    ))
+    ->execute();
+
+    drupal_set_message(t("Your message has been sent!"));
+}
+?>

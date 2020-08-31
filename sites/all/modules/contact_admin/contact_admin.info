@@ -1,0 +1,4 @@
+name = Contact Administration Module
+description = A custom module for the users to contact administrator related to their problems.
+core = 7.x
+package = Vaari
