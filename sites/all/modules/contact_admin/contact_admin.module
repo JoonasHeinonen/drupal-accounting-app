@@ -80,10 +80,6 @@ function contact_admin_contactform_validate($form, &$form_state) {
  * Submit the form and handle post-validation.
  */
 function contact_admin_contactform_submit($form, &$form_state) {
-    $title = $form_state['values']['message_title'];
-    $email = $form_state['values']['message_email'];
-    $message = $form_state['values']['message_content'];
-
     $message_id = db_insert('contact_admin')
     ->fields(array(
         'message_title' => $form_state['values']['message_title'],
@@ -92,6 +88,27 @@ function contact_admin_contactform_submit($form, &$form_state) {
     ))
     ->execute();
 
+    // This function will send the email to the administrator.
+    drupal_mail('contact_admin', 'sendmessage', 'mrdanglars@gmail.com', language_default());
+
     drupal_set_message(t("Your message has been sent!"));
 }
+
+/**
+ * Implements hook_mail().
+ */
+function contact_admin_mail($key, &$message, $params) {
+    $message_title = $form_state['values']['message_title'];
+    $message_email = $form_state['values']['message_email'];
+    $message_content = $form_state['values']['message_content'];
+
+    switch ($key) {
+        case 'sendmessage':
+            $message['subject'] = t($message_title);
+            $message['body'][] = t($message_email);
+            $message['body'][] = t($message_content);
+        break;
+    }
+}
+
 ?>
