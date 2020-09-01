@@ -3,45 +3,38 @@
 /**
  * Implements hook_schema().
  */
-/*
 function contact_admin_schema() {
     $schema['contact_admin'] = array(
         'description' => 'Table for messages sent to the website administration.',
         'fields' => array(
             'message_id' => array(
-                'description' => 'The primary identifier for a message.',
+                'description' => 'The primary identifier for a sent message.',
                 'type' => 'serial',
                 'unsigned' => TRUE,
                 'not null' => TRUE,
             ),
-            'title' => array(
+            'message_title' => array(
                 'description' => 'The title for the issue.',
                 'type' => 'varchar',
-                'unsigned' => TRUE,
+                'length' => 255,
                 'not null' => TRUE,
                 'default' => '',
             ),
-            'email' => array(
+            'message_email' => array(
                 'description' => 'The email of the message sender.',
                 'type' => 'varchar',
                 'length' => 255,
                 'not null' => TRUE,
                 'default' => '',
             ),
-            'title' => array(
-                'description' => 'The title for the issue.',
-                'type' => 'varchar',
-                'length' => 255,
+            'message_content' => array(
+                'description' => 'The actual content of the message.',
+                'type' => 'text',
                 'not null' => TRUE,
-                'default' => '',
             ),
         ),
-        'primary key' => array(
-            'message_id',
-        ),
+        'primary key' => array('message_id'),
     );
-
     return $schema;
 }
-*/
 ?>

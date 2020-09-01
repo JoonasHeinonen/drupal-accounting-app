@@ -37,7 +37,7 @@ function contact_admin_menu() {
 function contact_admin_contactform() {
     $form = array();
 
-    $form['title'] = array(
+    $form['message_title'] = array(
         '#title' => t('Title'),
         '#type' => 'textfield',
         '#description' => t('Enter the title for your issue.'),
@@ -45,7 +45,7 @@ function contact_admin_contactform() {
         '#required' => TRUE,
     );
 
-    $form['email'] = array(
+    $form['message_email'] = array(
         '#title' => t('Email'),
         '#type' => 'textfield',
         '#description' => t('Enter your email here.'),
@@ -53,7 +53,7 @@ function contact_admin_contactform() {
         '#required' => TRUE,
     );
 
-    $form['message'] = array(
+    $form['message_content'] = array(
         '#title' => t('Message'),
         '#type' => 'textarea',
         '#description' => t('Message and the description for the issue you\'re currently dealing with.'),
@@ -80,15 +80,15 @@ function contact_admin_contactform_validate($form, &$form_state) {
  * Submit the form and handle post-validation.
  */
 function contact_admin_contactform_submit($form, &$form_state) {
-    $title = $form_state['values']['title'];
-    $email = $form_state['values']['email'];
-    $message = $form_state['values']['message'];
+    $title = $form_state['values']['message_title'];
+    $email = $form_state['values']['message_email'];
+    $message = $form_state['values']['message_content'];
 
     $message_id = db_insert('contact_admin')
     ->fields(array(
-        'title' => $form_state['values']['title'],
-        'email' => $form_state['values']['email'],
-        'message' => $form_state['values']['message'],
+        'message_title' => $form_state['values']['message_title'],
+        'message_email' => $form_state['values']['message_email'],
+        'message_content' => $form_state['values']['message_content'],
     ))
     ->execute();
 
